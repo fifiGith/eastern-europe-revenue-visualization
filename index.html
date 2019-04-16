@@ -7,17 +7,44 @@
     <title>Revenue</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="jquery-3.4.0.min.js"></script>
+    <script src="./js/jquery-3.4.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
-    <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
-    <script src="jquery.csv.js"></script>
+    <script src="./js/Chart.bundle.min.js"></script>
+    <script src="./js/jquery.csv.js"></script>
     <style>
         div {
             width: 80%;
         }
 
-        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 15px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -25,74 +52,8 @@
     <div>
         <canvas id="myChart" width="300" height="150"></canvas>
         <p id="year">Year: 2003</p>
-          
-        <input id="slider" type="range" min="2003" max="2013" value="2003">
-        <script>
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: [],
-                        datasets: [{
-                            label: 'Revenue',
-                            data: [],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-
-            var revenue = []
-    
-            $.get("revenue.csv", function(res) {
-                revenue = $.csv.toArrays(res);
-                for (let i = 1; i < revenue.length; i++) {
-                    myChart.data.labels.push(revenue[i][0])
-                    myChart.data.datasets[0].data.push(revenue[i][1]);
-                }
-                myChart.update()
-            });
-
-            $('#slider').change(function() {
-                $('#year').html("Year: " + $('#slider').val())
-                const year = $('#slider').val();
-                let data = [];
-                for (let i = 0; i < revenue[0].length; i++) {
-                    myChart.data.datasets.forEach((dataset) => {
-                        dataset.data.pop();
-                    });
-                }
-
-                for (let i = 1; i < revenue.length; i++) {
-                    myChart.data.datasets[0].data.push(revenue[i][year - 2002]);
-                }
-                myChart.update()
-            });
-        </script>
+        <input id="slider" class="slider" type="range" min="2003" max="2013" value="2003">
+        <script src="./js/script.js"></script>
 </body>
 
 </html>
